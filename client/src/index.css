@@ -1,0 +1,57 @@
+
+
+@import "tailwindcss";
+
+@theme{
+    
+    --breakpoint-sm: 568px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 996px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-2xl: 1440px;
+
+}
+
+:root {
+
+    /* ===== BRAND ===== */
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+  
+    --secondary: #2563eb;
+    --secondary-hover: #1d4ed8;
+  
+    --accent: #f97316;
+    --accent-hover: #ea580c;
+  
+    /* ===== BACKGROUND ===== */
+    --bg-main: #ffffff;
+    --bg-soft: #f9fafb;
+    --bg-card: #ffffff;
+    --bg-hover: #f3f4f6;
+  
+    /* ===== TEXT ===== */
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --text-white: #ffffff;
+  
+    /* ===== BORDERS ===== */
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+  
+    /* ===== STATUS ===== */
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --danger: #dc2626;
+  
+    /* ===== EXTRA ===== */
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --shadow-big:rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    --radius: 12px;
+  }
+
+  ::-webkit-scrollbar{
+    display: none;
+  }
