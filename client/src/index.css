@@ -1,6 +1,6 @@
-
-
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
+
 
 @theme{
     
@@ -10,6 +10,20 @@
     --breakpoint-xl: 1200px;
     --breakpoint-2xl: 1440px;
 
+}
+
+*{
+  font-family: "Outfit", sans-serif;
+  /* font-family: 'San Francisco', Helvetica, Arial, san-serif; */
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #151312 !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 :root {
@@ -49,6 +63,7 @@
     --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.08);
     --shadow-big:rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    --shadow-right:8px 4px 13px 0px rgba(0, 0, 0, 0.2);
     --radius: 12px;
   }
 
