@@ -32,7 +32,6 @@ const Login = () => {
                                 Continue with Google
                             </button>
                         </div>
-                        <p className="text-sm text-center space-x-1.5 pb-5 mt-1 text-gray-600">Create An Account.<span className="font-medium text-violet-500 cursor-pointer">Click here</span></p>
                     </form>
   )
 }

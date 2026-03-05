@@ -4,6 +4,7 @@
 
 @theme{
     
+    --breakpoint-phone:350px;
     --breakpoint-sm: 568px;
     --breakpoint-md: 768px;
     --breakpoint-lg: 996px;
@@ -69,4 +70,18 @@ input:-webkit-autofill:active {
 
   ::-webkit-scrollbar{
     display: none;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 5px;
+    display: block;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: #cbd5f5;
+    border-radius: 20px;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: #a5b4fc;
   }
