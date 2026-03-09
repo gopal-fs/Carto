@@ -6,11 +6,12 @@ import Shops from "./pages/Shops"
 import Cart from "./pages/Cart"
 import Orders from "./pages/Orders"
 import Reviews from "./pages/Reviews"
-import Whistlist from "./pages/Whistlist"
 import Wallet from "./pages/Wallet"
-import Notification from "./pages/Notification"
 import Profile from "./pages/Profile"
 import Settings from "./pages/Settings"
+import ShopPage from "./pages/ShopPage"
+import SavedShops from "./pages/SavedShops"
+import Notifications from "./pages/Notification"
 
 
 const App = () => {
@@ -22,12 +23,13 @@ const App = () => {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="shops" element={<Shops />} />
+          <Route path="shops/:id" element={<ShopPage />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
           <Route path="reviews" element={<Reviews />} />
-          <Route path="whistlist" element={<Whistlist />} />
+          <Route path="saved-shops" element={<SavedShops />} />
           <Route path="wallet" element={<Wallet />} />
-          <Route path="notifications" element={<Notification />} />
+          <Route path="notifications" element={<Notifications />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
 

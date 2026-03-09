@@ -28,7 +28,7 @@ const menuItems: MenuItem[] = [
     { name: "Cart", icon: ShoppingCart },
     { name: "Orders", icon: Package },
     { name: "Reviews", icon: Star },
-    { name: "whistlist", icon: Heart },
+    { name: "saved-shops", icon: Heart },
     { name: "Wallet", icon: Wallet },
     { name: "Notifications", icon: Bell },
     {name:"Profile",icon:User},
