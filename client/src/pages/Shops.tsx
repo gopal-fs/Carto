@@ -1,7 +1,9 @@
 import { Heart, Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ShopCard = () => {
 
+  const navigate=useNavigate();
   const handleCopy = () => {
     navigator.clipboard.writeText("9876543210");
     alert("Phone number copied!");
@@ -46,7 +48,7 @@ const ShopCard = () => {
   {/* Buttons */}
   <div className="flex items-center justify-between mt-3">
 
-    <button className="bg-blue-600 cursor-pointer w-[120px] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800/80 transition">
+    <button onClick={()=>navigate('id')} className="bg-blue-600 cursor-pointer w-[120px] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800/80 transition">
       View Shop
     </button>
 

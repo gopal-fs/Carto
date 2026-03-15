@@ -1,216 +1,139 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
-import { Phone, Mail, MapPin, Star } from "lucide-react";
+import { useState } from "react"
+import banner1 from "../assets/b1.jpg.jpeg";
+import banner2 from "../assets/b2.jpg.jpeg";
+import banner3 from "../assets/b5.jpg.jpeg";
+import profile from "../assets/p1.jpg.jpeg"
+import { ChevronLeft, ChevronRight, Clock, Mail, MapPin, Phone, Star } from "lucide-react";
 
 const ShopPage = () => {
+
+  const images = [banner1, banner2, banner3];
+  const [imageCount, setImageCount] = useState(0);
+  const [tab,setTab]=useState<string>("products");
+
+  const next = () => {
+    setImageCount((prev) => (prev + 1) % images.length);
+  };
+
+  const prev = () => {
+    setImageCount((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
-    <div className="w-full bg-gray-50 min-h-screen">
+    <div className="min-h-screen w-full">
+      
+      <div className="relative w-full">
+        <div className="relative h-[30vh] w-full overflow-hidden">
 
-      {/* CAROUSEL */}
-
-      <div className="relative">
-
-        <div className="h-[260px] w-full overflow-hidden">
-
-          <Swiper
-            modules={[Pagination, Navigation, Autoplay]}
-            pagination={{ clickable: true }}
-            navigation
-            autoplay={{ delay: 3000 }}
-            loop
-            className="h-full"
-          >
-
-            <SwiperSlide>
-              <img
-                src="/logo.png"
-                className="h-full w-full object-cover"
-              />
-            </SwiperSlide>
-
-            <SwiperSlide>
-              <img
-                src="/logosym.png"
-                className="h-full w-full object-cover"
-              />
-            </SwiperSlide>
-
-            <SwiperSlide>
-              <img
-                src="/logo.png"
-                className="h-full w-full object-cover"
-              />
-            </SwiperSlide>
-
-          </Swiper>
-
-        </div>
-
-
-        {/* SHOP PROFILE */}
-
-        <div className="absolute left-6 -bottom-12">
-
-          <div className="w-24 h-24 rounded-xl border-4 border-white overflow-hidden bg-gray-200">
-
+        {/* Sliding container */}
+        <div
+          className="flex h-full transition-transform duration-500"
+          style={{ transform: `translateX(-${imageCount * 100}%)` }}
+        >
+          {images.map((img, index) => (
             <img
-              src="/logo.jpg"
-              className="w-full h-full object-cover"
+              key={index}
+              src={img}
+              className="w-full h-full object-cover flex-shrink-0"
             />
-
-          </div>
-
+          ))}
         </div>
 
+        {/* Buttons */}
+        <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-4">
+          <ChevronLeft onClick={prev} className="cursor-pointer" size={35} />
+          <ChevronRight onClick={next} className="cursor-pointer" size={35} />
+        </div>
+
+        </div>
+        <div className="border-3 border-[#4f46e5] rounded-full h-[150px] w-[150px] absolute bottom-[-90px] sm:bottom-[-140px] sm:h-[200px] sm:w-[200px] left-6 p-[3px]">
+          <img src={profile} className="h-full w-full rounded-full" alt="profile" />
+        </div>
       </div>
-
-
-      {/* SHOP INFO */}
-
-      <div className="bg-white pt-16 px-6 pb-6 border-b border-gray-200">
-
-        <div className="flex flex-col lg:flex-row lg:justify-between gap-6">
-
-          <div>
-
-            <h1 className="text-xl font-semibold text-gray-800">
-              Kumari Pickles
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mt-2">
-
-              <span className="flex items-center gap-1">
-                <MapPin size={16} /> Vijayawada
-              </span>
-
-              <span className="text-green-600 font-medium">
-                Open
-              </span>
-
-              <span className="flex items-center gap-1">
-                <Star size={16} className="text-yellow-500" /> 4.2
-              </span>
-
+      <div className="mt-[110px] sm:mt-[160px] flex flex-col gap-3 pl-8">
+        <h1 className="text-gray-800 font-bold text-xl sm:text-4xl">Raghavendra Kirana Stores</h1>
+        <span className="bg-[var(--success)] py-[3px] px-[9px] w-[max-content]  text-white font-normal text-sm rounded-full">Kirana Store</span>
+        <div className="flex flex-col gap-3 pr-3 lg:flex-row">
+          {/*Details */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full flex-1 gap-4 mb-6">
+            <div className="flex items-center space-x-3 p-4 h-[max-content] bg-gray-50 rounded-xl truncate">
+            <MapPin className="text-blue-400" />
+              <div className="flex flex-col">
+                <p className="text-gray-500">Location</p>
+                <p className="font-medium">Tadepalligudem</p>
+              </div>
             </div>
-
+         
+       
+            <div className="flex items-center space-x-3 p-4 h-[max-content] bg-gray-50 rounded-xl truncate">
+            <Clock className="text-green-400" />
+              <div className="flex flex-col">
+              <p className="text-gray-500">Status</p>
+              <p className="font-medium text-green-400">Open</p>
+              </div>
+            </div>
+         
+          
+            <div className="flex items-center space-x-3 p-4 h-[max-content] bg-gray-50 rounded-xl truncate">
+            <Star className="text-yellow-500" />
+              <div className="flex flex-col">
+              <p className="text-gray-500">Rating</p>
+              <p className="font-medium">4.5/5.0</p>
+              </div>
+            </div>
           </div>
 
-
-          <div className="flex flex-col gap-2 text-sm">
-
-            <span className="flex items-center gap-2">
-              <Phone size={16} /> 9876543210
-            </span>
-
-            <span className="flex items-center gap-2">
-              <Mail size={16} /> kumaripickles@gmail.com
-            </span>
-
-            <button className="bg-black text-white px-4 py-2 rounded-md mt-2 hover:opacity-90">
-              Book / Pre Order
-            </button>
-
+          <div className="flex flex-col gap-2 w-[100%] max-w-[400px]">
+            <div className="bg-blue-50 p-3 rounded flex flex-col gap-2">
+              <h1 className="text-sm">Contact Info</h1>
+              <div className="flex gap-1 items-center">
+                <Phone size={18} className="text-blue-400" />
+                <p className="text-gray-700">6302176979</p>
+              </div>
+              <div className="flex gap-1 items-center truncate">
+                <Mail size={18} className="text-blue-400" />
+                <p className="text-gray-700">gopalpinapathuni.2022@gmail.com</p>
+              </div>
+              <div className="flex gap-1 items-center">
+                <Phone size={18} className="text-blue-400" />
+                <p className="text-gray-700">Tadepalligudem</p>
+              </div>
+            </div>
+            <button className="w-full h-[40px] text-white bg-green-600 rounded-xl cursor-pointer">Book/Pre Order Items</button>
+            <button className="w-full h-[40px] text-white bg-emerald-600 cursor-pointer rounded-xl">Call Now</button>
           </div>
-
         </div>
-
-
-        <button className="mt-4 border border-gray-300 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-gray-100">
-
-          <Phone size={16} /> Call Now
-
-        </button>
-
       </div>
 
+      {/* Sales and Reviews */}
+      <div className="px-3 mt-5">
+          <div className="border-b flex gap-5 border-gray-200">
+            <span onClick={()=>setTab("products")} className={`py-4 px-1  font-medium text-sm capitalize cursor-pointer transition-colors ${tab==="products"?'border-b-2 border-blue-500 text-blue-600':'text-gray-500'}`}>Products</span>
+            <span onClick={()=>setTab("sale")} className={`py-4 px-1  font-medium text-sm capitalize cursor-pointer transition-colors ${tab==="sale"?'border-b-2 border-blue-500 text-blue-600':'text-gray-500'}`}>Flash Sale</span>
 
+            <span onClick={()=>setTab("reviews")} className={`py-4 px-1  font-medium text-sm capitalize cursor-pointer transition-colors ${tab==="reviews"?'border-b-2 border-blue-500 text-blue-600':'text-gray-500'}`}>Reviews</span>
 
-      {/* FLASH SALE */}
-
-      <section className="px-6 py-6">
-
-        <h2 className="text-lg font-semibold mb-4">
-          Flash Sale
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-          <div className="bg-white border border-gray-200 p-4 rounded-lg hover:shadow">
-
-            Mango Pickle
-
-            <p className="text-green-600 font-medium">
-              ₹150
-            </p>
 
           </div>
+      </div>
 
+      {tab==="products" && (
+        <div className="min-h-[200px] flex flex-col justify-center items-center w-full px-3">
+          <h1>Products Loading</h1>
         </div>
+      )}
 
-      </section>
-
-
-
-      {/* PRODUCTS */}
-
-      <section className="px-6 py-6">
-
-        <h2 className="text-lg font-semibold mb-4">
-          Products
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-          <div className="bg-white border border-gray-200 p-4 rounded-lg hover:shadow">
-
-            Lemon Pickle
-
-            <p className="text-gray-700">
-              ₹120
-            </p>
-
-          </div>
-
+    {tab==="sale" && (
+        <div className="min-h-[200px] flex flex-col justify-center items-center w-full px-3">
+          <h1>Sale is Live</h1>
         </div>
+      )}
 
-      </section>
-
-
-
-      {/* REVIEWS */}
-
-      <section className="px-6 py-6">
-
-        <h2 className="text-lg font-semibold mb-4">
-          Reviews
-        </h2>
-
-        <div className="bg-white border border-gray-200 p-4 rounded-lg">
-
-          <p className="text-sm text-gray-700">
-            Very tasty homemade pickles. Packaging also good.
-          </p>
-
-          <div className="flex items-center gap-2 mt-2 text-sm">
-
-            <span className="font-medium">
-              Ravi
-            </span>
-
-            <span className="flex items-center gap-1 text-yellow-500">
-              <Star size={14} /> 4
-            </span>
-
-          </div>
-
+    {tab==="reviews" && (
+        <div className="min-h-[200px] flex flex-col justify-center items-center w-full px-3">
+          <h1>No Reviews Yet</h1>
         </div>
-
-      </section>
+      )}
 
     </div>
   );

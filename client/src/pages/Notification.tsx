@@ -64,7 +64,7 @@ Offer valid till: 20 Mar 2026
 
 <div>
 
-<button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition">
+<button className="px-4 py-2 bg-green-600 text-white cursor-pointer rounded-lg text-sm hover:bg-green-700 transition">
 View Shop
 </button>
 

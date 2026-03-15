@@ -1,6 +1,9 @@
 import { Heart, Star, Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SavedShops = () => {
+
+    const navigate=useNavigate();
 
 return (
 
@@ -83,7 +86,7 @@ Pickles
 
 <div className="flex items-center justify-between mt-2">
 
-<button className="text-sm px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700">
+<button onClick={()=>navigate('/shops/id')} className="text-sm px-3 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700">
 View Shop
 </button>
 
