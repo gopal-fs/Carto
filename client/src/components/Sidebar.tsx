@@ -13,40 +13,35 @@ import {
     ChevronRight,
     LogOut,
     User,
-    
+
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 
 type MenuItem = {
     name: string;
     icon: React.ElementType;
+    path: string;
 };
 
 const menuItems: MenuItem[] = [
-    { name: "Dashboard", icon: LayoutDashboard },
-    { name: "Shops", icon: Store },
-    { name: "Cart", icon: ShoppingCart },
-    { name: "Orders", icon: Package },
-    { name: "Reviews", icon: Star },
-    { name: "saved-shops", icon: Heart },
-    { name: "Wallet", icon: Wallet },
-    { name: "Notifications", icon: Bell },
-    {name:"Profile",icon:User},
-    { name: "Settings", icon: Settings },
-    
+    { name: "Dashboard", icon: LayoutDashboard, path: "dashboard" },
+    { name: "Shops", icon: Store, path: "shops" },
+    { name: "Cart", icon: ShoppingCart, path: "cart" },
+    { name: "Orders", icon: Package, path: "orders" },
+    { name: "Reviews", icon: Star, path: "reviews" },
+    { name: "Saved Shops", icon: Heart, path: "saved-shops" },
+    { name: "Wallet", icon: Wallet, path: "wallet" },
+    { name: "Notifications", icon: Bell, path: "notifications" },
+    { name: "Profile", icon: User, path: "profile" },
+    { name: "Settings", icon: Settings, path: "settings" },
 ];
 
 const Sidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const [active, setActive] = useState("Dashboard");
-    const navigate=useNavigate();
+    
+    
 
-    const onNavigate=(itemName:string):void=>{
-        setActive(itemName);
-        navigate(itemName.toLocaleLowerCase());
-        
-        
-    }
+    
 
     return (
         <aside
@@ -70,25 +65,26 @@ const Sidebar = () => {
             </div>
 
             {/* Menu */}
-        
+
             <nav className="flex-1 overflow-hidden py-4 flex flex-col gap-3 px-2">
+
                 {menuItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = active === item.name;
 
                     return (
-                        <button
+
+                        <NavLink
                             key={item.name}
-                            onClick={()=>onNavigate(item.name)}
-                            className={`
-              flex items-center gap-3 w-full px-3
-              py-2.5 text-sm text-gray-700
-              rounded transition-all duration-200 cursor-pointer
-              ${isActive
-                                    ? "bg-slate-200/60"
-                                    : "hover:bg-gray-100/70"
-                                }
-              `}
+                            to={item.path}
+                            className={({ isActive }) =>
+                                `
+                flex items-center gap-3 w-full px-3 py-2.5 text-sm
+                rounded transition-all duration-200
+                ${isActive
+                                    ? "bg-emerald-100 text-emerald-700 font-medium"
+                                    : "text-gray-700 hover:bg-gray-100"}
+                `
+                            }
                         >
                             <Icon
                                 size={20}
@@ -99,9 +95,12 @@ const Sidebar = () => {
                             {!collapsed && (
                                 <span className="truncate">{item.name}</span>
                             )}
-                        </button>
+
+                        </NavLink>
+
                     );
                 })}
+
             </nav>
 
 

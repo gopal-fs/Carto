@@ -1,11 +1,14 @@
-import { Store, Mail, MapPin, Tag, Upload } from "lucide-react"
+import { Store, Mail, MapPin, Tag, Upload, Package } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 const RegisterShop = () => {
 
     const [shopType, setShopType] = useState("")
     const [isRegistered] = useState(false)
     const [preview, setPreview] = useState<string>("");
+    const isApproved="no";
+    const shopInfo={shop_name:"Kirana Stores"}
 
     const shopTypes = [
         "Grocery", "Restaurant", "Bakery", "Pharmacy",'Gunny Bags', "Electronics", "Mobile Repair",
@@ -21,6 +24,56 @@ const RegisterShop = () => {
         const url = URL.createObjectURL(file);
         setPreview(url);
     };
+
+    if(isApproved==="no"){
+        return (<div className="min-h-screen bg-gray-50">
+             <div className="h-[70px] border-b bg-white flex items-center px-6">
+                <img src="/logosym.png" className="h-[42px]" />
+            </div>
+    
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+              <div className="text-center">
+                {!shopInfo ? (
+                  <>
+                    <Store className="w-24 h-24 text-yellow-500 mx-auto mb-6" />
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Shop Not Registered</h2>
+                    <p className="text-gray-600 mb-8 text-lg">
+                      You haven't registered your shop yet. Please register your shop to start receiving orders.
+                    </p>
+                    <Link
+                      to="/shop/register"
+                      className="inline-flex items-center space-x-2 bg-emerald-600 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-emerald-700 transition-colors text-lg"
+                    >
+                      <Store className="w-6 h-6" />
+                      <span>Register Your Shop</span>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Package className="w-24 h-24 text-yellow-500 mx-auto mb-6" />
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Shop Pending Approval</h2>
+                    <p className="text-gray-600 mb-4 text-lg">
+                      Your shop "{shopInfo.shop_name}" is currently under review by our admin team.
+                    </p>
+                    <p className="text-gray-500 mb-8">
+                      You'll receive an email notification once your shop is approved and goes live.
+                    </p>
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 max-w-md mx-auto">
+                      <h3 className="font-semibold text-yellow-800 mb-2">What happens next?</h3>
+                      <ul className="text-sm text-yellow-700 space-y-1 text-left">
+                        <li>• Admin reviews your shop details</li>
+                        <li>• Verification of business information</li>
+                        <li>• Approval notification via email</li>
+                        <li>• Your shop goes live for customers</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>)
+    }
+
     return (
 
         <div className="min-h-screen bg-gray-50">

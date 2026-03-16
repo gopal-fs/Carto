@@ -19,6 +19,8 @@ import UserLayout from "./layouts/UserLayout"
 import ShopLayout from "./layouts/ShopLayout"
 import ShopDashboard from "./pages/shop/ShopDashboard"
 import RegisterShop from "./pages/shop/RegisterShop"
+import ShopProducts from "./pages/shop/ShopProducts"
+import ShopInfo from "./pages/shop/ShopPage"
 
 
 const App = () => {
@@ -43,9 +45,11 @@ const App = () => {
 
         </Route>
         <Route path="/shop" element={<Navigate to="register" />} />
+        <Route path="/shop/register" element={<RegisterShop />} />
         <Route path="/shop" element={<ShopLayout />}>
-          <Route index path="register" element={<RegisterShop />} />
-          <Route path="dashboard" element={<ShopDashboard />} />
+          <Route index path="dashboard" element={<ShopDashboard />} />
+          <Route index path="products" element={<ShopProducts />} />
+          <Route index path="shop-page" element={<ShopInfo />} />
           
         </Route>
         <Route path="*" element={<NotFound />}/>
