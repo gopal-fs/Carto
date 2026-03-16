@@ -1,9 +1,11 @@
 import { useState } from "react"
-import banner1 from "../assets/b1.jpg.jpeg";
-import banner2 from "../assets/b2.jpg.jpeg";
-import banner3 from "../assets/b5.jpg.jpeg";
-import profile from "../assets/p1.jpg.jpeg"
+import banner1 from "../../assets/b1.jpg.jpeg";
+import banner2 from "../../assets/b2.jpg.jpeg";
+import banner3 from "../../assets/b5.jpg.jpeg";
+import profile from "../../assets/p1.jpg.jpeg"
 import { ChevronLeft, ChevronRight, Clock, Mail, MapPin, Phone, Star } from "lucide-react";
+import Products from "../../components/Products";
+
 
 const ShopPage = () => {
 
@@ -118,15 +120,17 @@ const ShopPage = () => {
       </div>
 
       {tab==="products" && (
-        <div className="min-h-[200px] flex flex-col justify-center items-center w-full px-3">
-          <h1>Products Loading</h1>
+        <div className="pb-5 px-3 mt-3 flex flex-col justify-center items-center sm:flex-row sm:justify-start sm:items-start flex-wrap gap-3">
+          <Products />
+          <Products />
         </div>
       )}
 
     {tab==="sale" && (
-        <div className="min-h-[200px] flex flex-col justify-center items-center w-full px-3">
-          <h1>Sale is Live</h1>
-        </div>
+        <div className="pb-5 px-3 mt-3 flex flex-col justify-center items-center sm:flex-row sm:justify-start sm:items-start flex-wrap gap-3">
+        <Products />
+        <Products />
+      </div>
       )}
 
     {tab==="reviews" && (

@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 
-const MainLayout = () => {
+const UserLayout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
@@ -22,4 +22,4 @@ const MainLayout = () => {
 }
 
 
-export default MainLayout
+export default UserLayout
