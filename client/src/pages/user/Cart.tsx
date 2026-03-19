@@ -31,14 +31,14 @@ const Cart = () => {
     <h1 className='text-2xl sm:text-4xl md:text-6xl mt-5'>Your Cart Is Empty</h1>
    
       
-      <button onClick={()=>navigate('/shops')} className='h-[40px] w-[160px] mt-5 rounded bg-black text-white cursor-pointer'>Shop Now</button>
+      <button onClick={()=>navigate('/user/shops')} className='h-[40px] w-[160px] mt-5 rounded bg-black text-white cursor-pointer'>Shop Now</button>
 
    </div>):(
     <div className='w-full p-3 flex flex-col justify-center items-center'>
     <div className=' w-full max-w-[1200px] p-3  bg-white border-gray-200 rounded-xl border-1'>
       <div className='w-full flex flex-col items-center justify-center'>
         <h1 className='text-3xl font-bold text-gray-800'>My Cart</h1>
-        <button onClick={()=>navigate('/shops')} className='rounded h-[36px] w-[120px] text-white bg-blue-600 cursor-pointer hover:bg-blue-500 border-blue-500 mt-3'>Shop More</button>
+        <button onClick={()=>navigate('/user/shops')} className='rounded h-[36px] w-[120px] text-white bg-blue-600 cursor-pointer hover:bg-blue-500 border-blue-500 mt-3'>Shop More</button>
     
       </div>
       <div className="mb-8">

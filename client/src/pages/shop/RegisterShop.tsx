@@ -7,7 +7,7 @@ const RegisterShop = () => {
     const [shopType, setShopType] = useState("")
     const [isRegistered] = useState(false)
     const [preview, setPreview] = useState<string>("");
-    const isApproved="no";
+    const isApproved:string="yes";
     const shopInfo={shop_name:"Kirana Stores"}
 
     const shopTypes = [

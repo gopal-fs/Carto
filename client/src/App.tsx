@@ -1,5 +1,19 @@
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom"
 
+import AdminLayout from "./layouts/AdminLayout"
+import AdminDashboard from "./pages/admin/AdminDashboard"
+
+import DeliveryLayout from "./layouts/DeliveryLayout"
+import DeliveryDashboard from "./pages/delivery/DeliveryDashboard"
+import DeliveryOrders from "./pages/delivery/DeliveryOrders"
+import DeliveryProfile from "./pages/delivery/DeliveryProfile"
+
+import VendorLayout from "./layouts/VendorLayout"
+import VendorDashboard from "./pages/vendor/VendorDashboard"
+import VendorProducts from "./pages/vendor/VendorProducts"
+import VendorAddProduct from "./pages/vendor/VendorAddProduct"
+import VendorSellSample from "./pages/vendor/VendorSellSample"
+import VendorOrders from "./pages/vendor/VendorOrders"
 
 import Dashboard from "./pages/user/Dashboard"
 import Shops from "./pages/user/Shops"
@@ -21,6 +35,10 @@ import ShopDashboard from "./pages/shop/ShopDashboard"
 import RegisterShop from "./pages/shop/RegisterShop"
 import ShopProducts from "./pages/shop/ShopProducts"
 import ShopInfo from "./pages/shop/ShopPage"
+import Coupon from "./pages/shop/Coupon"
+import AddProduct from "./pages/shop/AddProduct"
+import Sale from "./pages/shop/Sale"
+import ShopVendor from "./pages/shop/ShopVendor"
 
 
 const App = () => {
@@ -44,13 +62,31 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
 
         </Route>
-        <Route path="/shop" element={<Navigate to="register" />} />
+        {/* <Route path="/shop" element={<Navigate to="register" />} /> */}
         <Route path="/shop/register" element={<RegisterShop />} />
-        <Route path="/shop" element={<ShopLayout />}>
-          <Route index path="dashboard" element={<ShopDashboard />} />
-          <Route index path="products" element={<ShopProducts />} />
-          <Route index path="shop-page" element={<ShopInfo />} />
-          
+        <Route path="/shop/:id" element={<ShopLayout />}>
+          <Route index  element={<ShopDashboard />} />
+          <Route  path="products" element={<ShopProducts />} />
+          <Route  path="shop-page" element={<ShopInfo />} />
+          <Route  path="coupons" element={<Coupon />} />
+          <Route  path="sale" element={<Sale />} />
+          <Route  path="add-products" element={<AddProduct />} />
+          <Route  path="vendor" element={<ShopVendor />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+        </Route>
+        <Route path="/vendor" element={<VendorLayout />}>
+          <Route index element={<VendorDashboard />} />
+          <Route path="products" element={<VendorProducts />} />
+          <Route path="add-product" element={<VendorAddProduct />} />
+          <Route path="sell-sample" element={<VendorSellSample />} />
+          <Route path="orders" element={<VendorOrders />} />
+        </Route>
+        <Route path="/delivery" element={<DeliveryLayout />}>
+          <Route index element={<DeliveryDashboard />} />
+          <Route path="orders" element={<DeliveryOrders />} />
+          <Route path="profile" element={<DeliveryProfile />} />
         </Route>
         <Route path="*" element={<NotFound />}/>
         <Route path="/login" element={<Auth />} />

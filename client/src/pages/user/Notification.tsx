@@ -1,8 +1,10 @@
 import { Store } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Notifications = () => {
-
+    const navigate=useNavigate();
 return (
+    
 
 <div className="w-full p-4 lg:p-8 bg-gray-50 min-h-screen">
 
@@ -64,7 +66,7 @@ Offer valid till: 20 Mar 2026
 
 <div>
 
-<button className="px-4 py-2 bg-green-600 text-white cursor-pointer rounded-lg text-sm hover:bg-green-700 transition">
+<button onClick={()=>navigate('/user/shops/id')} className="px-4 py-2 bg-green-600 text-white cursor-pointer rounded-lg text-sm hover:bg-green-700 transition">
 View Shop
 </button>
 

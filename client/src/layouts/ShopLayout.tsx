@@ -7,7 +7,11 @@ import {
   LogOut,
   Menu,
   X,
-  User
+  User,
+  Tag,
+  PackagePlus,
+  BadgeDollarSign,
+  Orbit
 } from "lucide-react"
 
 const ShopLayout = () => {
@@ -47,7 +51,8 @@ const ShopLayout = () => {
         <nav className="flex flex-col gap-2 px-4">
 
           <NavLink
-            to="/shop/dashboard"
+            to="/shop/id"
+            end
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -59,8 +64,28 @@ const ShopLayout = () => {
             Dashboard
           </NavLink>
 
+
           <NavLink
-            to="/shop/products"
+            to="/shop/id/vendor"
+            end
+            className={({isActive}) =>
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition
+              ${isActive
+                ? "bg-emerald-500 text-white font-medium"
+                : "hover:bg-emerald-500 hover:text-white"}`
+            }
+          >
+            <Orbit size={18}/>
+            Space
+          </NavLink>
+
+          
+
+
+
+
+          <NavLink
+            to="/shop/id/products"
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -73,7 +98,22 @@ const ShopLayout = () => {
           </NavLink>
 
           <NavLink
-            to="/shop/shop-page"
+            to="/shop/id/add-products"
+            className={({isActive}) =>
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition
+              ${isActive
+                ? "bg-emerald-500 text-white font-medium"
+                : "hover:bg-emerald-500 hover:text-white"}`
+            }
+          >
+            <PackagePlus size={18}/>
+            Add Products
+          </NavLink>
+
+          
+
+          <NavLink
+            to="/shop/id/shop-page"
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -83,6 +123,33 @@ const ShopLayout = () => {
           >
             <Store size={18}/>
             Shop
+          </NavLink>
+
+          <NavLink
+            to="/shop/id/coupons"
+            className={({isActive}) =>
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition
+              ${isActive
+                ? "bg-emerald-500 text-white font-medium"
+                : "hover:bg-emerald-500 hover:text-white"}`
+            }
+          >
+            <Tag size={18}/>
+            Coupons
+          </NavLink>
+
+          <NavLink
+            to="/shop/id/sale"
+            end
+            className={({isActive}) =>
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition
+              ${isActive
+                ? "bg-emerald-500 text-white font-medium"
+                : "hover:bg-emerald-500 hover:text-white"}`
+            }
+          >
+            <BadgeDollarSign size={18} />
+            Sale
           </NavLink>
 
           <div className="mt-6 border-t pt-4 flex flex-col gap-4">
@@ -126,8 +193,6 @@ const ShopLayout = () => {
   </button>
 
 </div>
-
-        
 
           
 

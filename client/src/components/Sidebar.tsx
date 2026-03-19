@@ -25,15 +25,15 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: LayoutDashboard, path: "dashboard" },
-    { name: "Shops", icon: Store, path: "shops" },
-    { name: "Cart", icon: ShoppingCart, path: "cart" },
-    { name: "Orders", icon: Package, path: "orders" },
-    { name: "Reviews", icon: Star, path: "reviews" },
-    { name: "Saved Shops", icon: Heart, path: "saved-shops" },
-    { name: "Wallet", icon: Wallet, path: "wallet" },
-    { name: "Notifications", icon: Bell, path: "notifications" },
-    { name: "Profile", icon: User, path: "profile" },
-    { name: "Settings", icon: Settings, path: "settings" },
+    { name: "Shops", icon: Store, path: "/user/shops" },
+    { name: "Cart", icon: ShoppingCart, path: "/user/cart" },
+    { name: "Orders", icon: Package, path: "/user/orders" },
+    { name: "Reviews", icon: Star, path: "/user/reviews" },
+    { name: "Saved Shops", icon: Heart, path: "/user/saved-shops" },
+    { name: "Wallet", icon: Wallet, path: "/user/wallet" },
+    { name: "Notifications", icon: Bell, path: "/user/notifications" },
+    { name: "Profile", icon: User, path: "/user/profile" },
+    { name: "Settings", icon: Settings, path: "/user/settings" },
 ];
 
 const Sidebar = () => {
