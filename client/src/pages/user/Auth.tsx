@@ -1,4 +1,4 @@
-import { useState } from "react"
+import {useState } from "react"
 import Login from "../../components/Login";
 import Register from "../../components/Register";
 
@@ -6,6 +6,7 @@ import Register from "../../components/Register";
 const Auth = () => {
     const [selectedTab, setSelectedTab] = useState<string>("user");
     const [loginTab,setLoginTab]=useState<boolean>(true);
+    
     return (
         <div className="w-full min-h-screen flex bg-[#afaef5]/40">
 

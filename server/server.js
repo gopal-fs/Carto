@@ -5,23 +5,31 @@ import dotenv from "dotenv";
 import { Server } from "socket.io";
 import {createServer} from "http";
 import userRouter from "./routes/userRouter.js";
+import { checkAuth } from "./middlewares/checkAuth.js";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app=express();
+
 const server=createServer(app);
 
 const io=new Server({cors:{
-    origin:"*"
+    origin: "http://localhost:5173", // your frontend
+    credentials: true
 }});
 
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173", // your frontend
+    credentials: true
+}));
+app.use(cookieParser());
 app.use(express.json());
 
 io.on("connection",(socket)=>{
     console.log(socket.id);
 })
 
-app.get('/',(req,res)=>{
+app.get('/',checkAuth,(req,res)=>{
     res.send("Hi")
 })
 

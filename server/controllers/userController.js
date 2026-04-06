@@ -2,7 +2,7 @@
 import bcrypt from "bcrypt"
 import userModel from "../schemas/userSchema.js";
 import {v4 as uuid} from "uuid";
-import { generateToekn } from "../utils/generateToken.js";
+import { generateToken } from "../utils/generateToken.js";
 import { registerValidator } from "../validators/registerValidator.js";
 
 export const Register=async(req,res)=>{
@@ -22,16 +22,17 @@ export const Register=async(req,res)=>{
 
         const payload={user_id:user_id,email:email};
 
-        const  tokenResult= generateToekn(payload);
+        const  tokenResult= generateToken(payload);
         if(!tokenResult.success) return res.status(400).send({success:false,message:tokenResult.message});
 
         await createUser.save();
-
+       
         res.cookie("token",tokenResult.message,{
-            secure:true,
+            
             httpOnly:true,
-            sameSite:"Strict",
-            maxAge:2592000
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            maxAge:30 * 24 * 60 * 60 * 1000
         })
 
         return res.status(201).send({success:true,message:"Register Successfull"});
@@ -42,4 +43,35 @@ export const Register=async(req,res)=>{
     catch(err){
         return res.status(500).send({success:false,message:"Unable to Register User"})
     }
+}
+
+
+export const Login=async(req,res)=>{
+    try{
+        const {email,password}=req.body;
+        if(!email || !password) return res.status(400).send({ success: false, message: "All fields required" });
+
+        const findUser=await userModel.findOne({email});
+        if(!findUser) return res.status(400).send({success:false,message:"User Not Found"});
+
+        const isPasswordMatched=await bcrypt.compare(password,findUser.password);
+        if(!isPasswordMatched) return res.status(400).send({success:false,message:"Password Incorrect"});
+        const payload={user_id:findUser.user_id,email:findUser.email};
+        const tokenResult=generateToken(payload);
+       
+        if(!tokenResult.success) return res.status(400).send({success:false,message:tokenResult.message});
+        res.cookie("token",tokenResult.message,{
+            httpOnly:true,
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            maxAge:30 * 24 * 60 * 60 * 1000
+        })
+
+        return res.status(200).send({success:true,message:"Login Successfull"});
+    }
+    catch(err){
+        console.log(err.message);
+        return res.status(500).send({success:false,message:"Unable to Login User"});
+    }
+
 }
