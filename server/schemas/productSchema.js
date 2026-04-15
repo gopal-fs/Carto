@@ -11,5 +11,6 @@ const productSchema= new mongoose.Schema({
     isAvailable:{type:Boolean,default:true}
 },{timestamps:true});
 
+
 const productModel= mongoose.models.products || mongoose.model("products",productSchema);
 export default productModel

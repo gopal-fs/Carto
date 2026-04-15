@@ -37,7 +37,7 @@ app.get('/',checkAuth,(req,res)=>{
 
 
 /* Route Definitions */
-app.use('/user/api',userRouter);
+app.use('/api',userRouter);
 
 
 

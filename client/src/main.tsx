@@ -3,12 +3,16 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { Toaster } from 'react-hot-toast'
-import { ThemeProvider } from '@material-tailwind/react'
+import { Provider } from 'react-redux'
+import store from "./context/store.ts"
 
 createRoot(document.getElementById('root')!).render(
  <>
 
- <App />
+<Provider store={store}>
+   <App />
+</Provider>
+
 
   
     <Toaster position="top-center" reverseOrder={false} />

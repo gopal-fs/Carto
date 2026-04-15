@@ -172,7 +172,8 @@ const Dashboard = () => {
     </div>
 
     <div className="w-full flex justify-center items-center">
-    <button className="bg-[var(--secondary)] rounded text-white h-[36px] w-[120px] mt-3 cursor-pointer hover:bg-[var(--secondary)]/92">Browse more..</button>
+      <span className="hidden" id="info">Go to Check for your Monthly Automation List.</span>
+    <button aria-describedby="info" className="bg-[var(--secondary)] rounded text-white h-[36px] w-[120px] mt-3 cursor-pointer hover:bg-[var(--secondary)]/92">Browse more..</button>
 
     </div>
 

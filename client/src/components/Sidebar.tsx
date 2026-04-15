@@ -21,11 +21,12 @@ type MenuItem = {
     name: string;
     icon: React.ElementType;
     path: string;
+    arialabel?:string
 };
 
 const menuItems: MenuItem[] = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "dashboard" },
-    { name: "Shops", icon: Store, path: "/user/shops" },
+    { name: "Dashboard", icon: LayoutDashboard, path: "dashboard",arialabel:"Dashboard Page" },
+    { name: "Shops", icon: Store, path: "/user/shops", arialabel:"Shop Page" },
     { name: "Cart", icon: ShoppingCart, path: "/user/cart" },
     { name: "Orders", icon: Package, path: "/user/orders" },
     { name: "Reviews", icon: Star, path: "/user/reviews" },
@@ -74,6 +75,7 @@ const Sidebar = () => {
                     return (
 
                         <NavLink
+                            aria-label={item.arialabel}
                             key={item.name}
                             to={item.path}
                             className={({ isActive }) =>
