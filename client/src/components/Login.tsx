@@ -1,11 +1,37 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { LoginUser } from '../context/user';
+import type { AppDispatch } from '../context/store';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [checked,setChecked]=useState<boolean>(false);
+    const dispatch=useDispatch<AppDispatch>();
+    const [email,setEmail]=useState<string>("");
+    const [password,setPassword]=useState<string>("");
+    const navigate=useNavigate();
+    
+
+    const handleLogin=async(e:React.FormEvent)=>{
+        e.preventDefault();
+        const result=await dispatch(LoginUser({email,password}));
+        console.log(result)
+        if(LoginUser.fulfilled.match(result)){
+            toast.success("Login Successfull")
+            return navigate('/user/dashboard');
+        }
+        else{
+            const error:string | undefined=result.payload;
+            return toast.error(error ?? "Login Failed");
+        }
+        
+    }
+
   return (
-    <form  className="flex flex-col mt-3 gap-5" >
-                        <input type="email" required className="flex-1 px-3 outline-0 py-2 border-1 border-gray-300 bg-white placeholder:text-gray-400 rounded-[12px]" placeholder="Enter your email..." />
-                        <input type="password" required className="flex-1 px-3 outline-0 py-2 border-1 border-gray-300 bg-white placeholder:text-gray-400 rounded-[12px]" placeholder="Enter your password..." />
+    <form onSubmit={handleLogin}  className="flex flex-col mt-3 gap-5" >
+                        <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" required className="flex-1 px-3 outline-0 py-2 border-1 border-gray-300 bg-white placeholder:text-gray-400 rounded-[12px]" placeholder="Enter your email..." />
+                        <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" required className="flex-1 px-3 outline-0 py-2 border-1 border-gray-300 bg-white placeholder:text-gray-400 rounded-[12px]" placeholder="Enter your password..." />
 
                         <div className="flex gap-1 items-center">
                             <input onChange={() => setChecked(prev => !prev)} className="h-3 w-7" type="checkbox" required />

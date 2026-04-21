@@ -53,7 +53,7 @@ const Auth = () => {
 
                     </div>
 
-                    {loginTab?<Login />:<Register />}
+                    {loginTab?<Login />:<Register user_type={selectedTab} />}
                     {loginTab?<p className="text-sm text-center space-x-1.5  mt-1 text-gray-600">Create An Account.<span className="font-medium text-violet-500 cursor-pointer" onClick={()=>setLoginTab(false)}>Click here</span></p>:<p className="text-sm text-center space-x-1.5 pb-5 mt-1 text-gray-600">Already Have An Account.<span className="font-medium text-violet-500 cursor-pointer" onClick={()=>setLoginTab(true)}>Click here</span></p>}
 
                 </div>

@@ -35,7 +35,7 @@ export const Register=async(req,res)=>{
             maxAge:30 * 24 * 60 * 60 * 1000
         })
 
-        return res.status(201).send({success:true,message:"Register Successfull"});
+        return res.status(201).send({success:true,message:"Register Successfull",userPayload:payload});
 
         
 
@@ -48,10 +48,12 @@ export const Register=async(req,res)=>{
 
 export const Login=async(req,res)=>{
     try{
+       
         const {email,password}=req.body;
         if(!email || !password) return res.status(400).send({ success: false, message: "All fields required" });
 
         const findUser=await userModel.findOne({email});
+        
         if(!findUser) return res.status(400).send({success:false,message:"User Not Found"});
 
         const isPasswordMatched=await bcrypt.compare(password,findUser.password);
@@ -67,7 +69,9 @@ export const Login=async(req,res)=>{
             maxAge:30 * 24 * 60 * 60 * 1000
         })
 
-        return res.status(200).send({success:true,message:"Login Successfull"});
+        
+
+        return res.status(200).send({success:true,message:"Login Successfull",userPayload:payload});
     }
     catch(err){
         console.log(err.message);
@@ -75,3 +79,30 @@ export const Login=async(req,res)=>{
     }
 
 }
+
+
+export const getUser = async (req, res) => {
+    try {
+      const userData = req.payload;
+  
+      if (!userData) {
+        return res.status(401).send({
+          success: false,
+          message: "Please Login",
+        });
+      }
+  
+      return res.status(200).send({
+        success: true,
+        message: "User authenticated",
+        user: userData,
+      });
+  
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).send({
+        success: false,
+        message: "Internal Server Error",
+      });
+    }
+  };

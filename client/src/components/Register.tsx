@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { registerUser } from "../context/user";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../context/store";
+import { useNavigate } from "react-router-dom";
 
 type User = {
     email: string;
     password: string;
-    phone: string;
+    number: string;
     location: string;
     latitude: number | null;
     longitude: number | null;
 };
 
-const Register = () => {
+const Register = ({user_type}:{user_type:string}) => {
     const [checked, setChecked] = useState<boolean>(false);
     const [locationLocked, setLocationLocked] = useState<boolean>(true);
+    const dispatch=useDispatch<AppDispatch>();
+    const navigate=useNavigate();
 
     const [user, setUser] = useState<User>({
         email: "",
         password: "",
-        phone: "",
+        number: "",
         location: "",
         latitude: null,
         longitude: null,
@@ -93,8 +99,21 @@ const Register = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleRegister=async(e:React.FormEvent)=>{
+        e.preventDefault();
+        const result=await dispatch(registerUser({...user,user_type}));
+        if(registerUser.fulfilled.match(result)){
+            toast.success("Register Successfull");
+            return navigate('/user/dashboard');
+        }
+        else{
+            const error:string | undefined=result.payload;
+            return toast.error(error ?? "Registration Failed");
+        }
+    }
+
     return (
-        <form className="flex flex-col mt-3 gap-5">
+        <form onSubmit={handleRegister} className="flex flex-col mt-3 gap-5">
             <input
                 type="email"
                 required
@@ -121,9 +140,9 @@ const Register = () => {
                 type="tel"
                 required
                 pattern="[0-9]{10}"
-                value={user.phone}
+                value={user.number}
                 onChange={(e) =>
-                    setUser((prev) => ({ ...prev, phone: e.target.value }))
+                    setUser((prev) => ({ ...prev, number: e.target.value }))
                 }
                 className="flex-1 px-3 outline-0 py-2 border border-gray-300 bg-white placeholder:text-gray-400 rounded-[12px]"
                 placeholder="Enter your number..."

@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom"
 
 import AdminLayout from "./layouts/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -39,6 +39,9 @@ import Coupon from "./pages/shop/Coupon"
 import AddProduct from "./pages/shop/AddProduct"
 import Sale from "./pages/shop/Sale"
 import ShopVendor from "./pages/shop/ShopVendor"
+import Protected from "./pages/Protected"
+import CheckAuth from "./hooks/checkAuth"
+
 
 
 const App = () => {
@@ -46,7 +49,10 @@ const App = () => {
   const router=createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<Navigate to="/user/dashboard" replace />} />
+      <Route path="/" element={<CheckAuth />} />
+
+        <Route element={<Protected />}>
+        
         <Route path="/user" element={<UserLayout />}>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path="shops" element={<Shops />} />
@@ -54,6 +60,10 @@ const App = () => {
           <Route path="shops/:id/:productId" element={<ProductDetailPage />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
+          
+            
+
+         
           <Route path="reviews" element={<Reviews />} />
           <Route path="saved-shops" element={<SavedShops />} />
           <Route path="wallet" element={<Wallet />} />
@@ -61,6 +71,7 @@ const App = () => {
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
 
+        </Route>
         </Route>
         {/* <Route path="/shop" element={<Navigate to="register" />} /> */}
         <Route path="/shop/register" element={<RegisterShop />} />
