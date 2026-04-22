@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 type AuthState = {
   user_id: string | null;
@@ -7,6 +8,7 @@ type AuthState = {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  user_type:string
 };
 
 type LoginResponse = {
@@ -15,6 +17,7 @@ type LoginResponse = {
   userPayload: {
     user_id: string;
     email: string;
+    user_type:string
   };
 };
 
@@ -34,7 +37,13 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   isAuthenticated: false,
+  user_type:""
 };
+
+type logoutResponse={
+  success:boolean,
+  message:string
+}
 
 
 const backend_url: string = import.meta.env.VITE_BACKEND_URL;
@@ -82,15 +91,38 @@ export const registerUser=createAsyncThunk<registerResponse,{email:string,passwo
   }
 )
 
+export const logoutUser=createAsyncThunk<logoutResponse,void,{rejectValue:string}>(
+  "user/logout",
+  async(_,{rejectWithValue})=>{
+    try{
+      const res=await axios.get(`${backend_url}/logout`,{
+        withCredentials:true,
+      });
+      toast.success("Logout Successfull");
+      return res.data;
+    }
+    catch (err) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(
+          err.response?.data?.message || "Logout Failed"
+        );
+      }
+      return rejectWithValue("Logout Failed");
+    }
+  }
+
+)
+
 
 const userSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user_id = null;
-      state.email = "";
-      state.isAuthenticated = false;
+    setUser: (state, action: { payload: { user_id: string; email: string } }) => {
+      state.user_id = action.payload.user_id;
+      state.email = action.payload.email;
+      state.isAuthenticated = true;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +137,7 @@ const userSlice = createSlice({
         state.email = action.payload.userPayload.email;
         state.isAuthenticated = true;
         state.error = null;
+        state.user_type=action.payload.userPayload.user_type;
       })
       .addCase(LoginUser.rejected, (state, action) => {
         state.loading = false;
@@ -127,10 +160,15 @@ const userSlice = createSlice({
         state.error = action.payload || "Something went wrong";
         state.isAuthenticated = false;
       })
+      .addCase(logoutUser.fulfilled,(state)=>{
+        state.user_id = null;
+        state.email = "";
+        state.isAuthenticated = false;
+      })
   },
 
   
 });
 
-export const { logout } = userSlice.actions;
+export const {  setUser } = userSlice.actions;
 export default userSlice.reducer;

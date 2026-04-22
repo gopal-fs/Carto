@@ -20,7 +20,7 @@ export const Register=async(req,res)=>{
         const hashedPassword= await bcrypt.hash(password,12);
         const createUser=await new userModel({user_id:user_id,email,password:hashedPassword,number,location,latitude,longitude,user_type})
 
-        const payload={user_id:user_id,email:email};
+        const payload={user_id:user_id,email:email,user_type:user_type};
 
         const  tokenResult= generateToken(payload);
         if(!tokenResult.success) return res.status(400).send({success:false,message:tokenResult.message});
@@ -58,7 +58,7 @@ export const Login=async(req,res)=>{
 
         const isPasswordMatched=await bcrypt.compare(password,findUser.password);
         if(!isPasswordMatched) return res.status(400).send({success:false,message:"Password Incorrect"});
-        const payload={user_id:findUser.user_id,email:findUser.email};
+        const payload={user_id:findUser.user_id,email:findUser.email,user_type:findUser.user_type};
         const tokenResult=generateToken(payload);
        
         if(!tokenResult.success) return res.status(400).send({success:false,message:tokenResult.message});
@@ -83,6 +83,7 @@ export const Login=async(req,res)=>{
 
 export const getUser = async (req, res) => {
     try {
+      console.log("Hits")
       const userData = req.payload;
   
       if (!userData) {
@@ -106,3 +107,25 @@ export const getUser = async (req, res) => {
       });
     }
   };
+
+
+  export const logout=async(req,res)=>{
+    try{
+
+      console.log("Hits123")
+      res.clearCookie("token",{
+        httpOnly:true,
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+       
+      });
+
+      res.setHeader("Clear-Site-Data", '"cache", "cookies", "storage"');
+      console.log("Hits123")
+
+      return res.status(200).send({success:true,message:"Logout Successfull"});
+    }
+    catch(err){
+      return res.status(500).send({success:false,message:"Unable to logout"});
+    }
+  }

@@ -15,7 +15,10 @@ import {
     User,
 
 } from "lucide-react";
-import { NavLink} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../context/store";
+import {  logoutUser } from "../context/user.ts";
 
 type MenuItem = {
     name: string;
@@ -40,6 +43,13 @@ const menuItems: MenuItem[] = [
 const Sidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
     
+    const dispatch=useDispatch<AppDispatch>();
+    const navigate=useNavigate();
+
+    const handleLogout=async()=>{
+        await dispatch(logoutUser());
+        navigate("/login",{replace:true});
+    };
     
 
     
@@ -127,6 +137,7 @@ const Sidebar = () => {
                     )}
 
                     <LogOut
+                        onClick={handleLogout}
                         size={18}
                         className="text-gray-500 cursor-pointer hover:text-red-500 transition"
                     />

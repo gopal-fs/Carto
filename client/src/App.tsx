@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom"
 
 import AdminLayout from "./layouts/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -40,7 +40,7 @@ import AddProduct from "./pages/shop/AddProduct"
 import Sale from "./pages/shop/Sale"
 import ShopVendor from "./pages/shop/ShopVendor"
 import Protected from "./pages/Protected"
-import CheckAuth from "./hooks/checkAuth"
+
 
 
 
@@ -49,10 +49,10 @@ const App = () => {
   const router=createBrowserRouter(
     createRoutesFromElements(
       <>
-      <Route path="/" element={<CheckAuth />} />
+      
 
         <Route element={<Protected />}>
-        
+        <Route path="/" element={<Navigate to='/user/dashboard' />} />
         <Route path="/user" element={<UserLayout />}>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path="shops" element={<Shops />} />

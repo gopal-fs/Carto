@@ -14,12 +14,12 @@ const app=express();
 const server=createServer(app);
 
 const io=new Server({cors:{
-    origin: "http://localhost:5173", // your frontend
+    origin: "http://localhost:5173", 
     credentials: true
 }});
 
 app.use(cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: "http://localhost:5173", 
     credentials: true
 }));
 app.use(cookieParser());
