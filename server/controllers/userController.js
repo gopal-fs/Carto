@@ -83,8 +83,8 @@ export const Login=async(req,res)=>{
 
 export const getUser = async (req, res) => {
     try {
-      console.log("Hits")
       const userData = req.payload;
+    
   
       if (!userData) {
         return res.status(401).send({
@@ -112,7 +112,6 @@ export const getUser = async (req, res) => {
   export const logout=async(req,res)=>{
     try{
 
-      console.log("Hits123")
       res.clearCookie("token",{
         httpOnly:true,
         secure: process.env.NODE_ENV === "production", 
@@ -121,7 +120,6 @@ export const getUser = async (req, res) => {
       });
 
       res.setHeader("Clear-Site-Data", '"cache", "cookies", "storage"');
-      console.log("Hits123")
 
       return res.status(200).send({success:true,message:"Logout Successfull"});
     }

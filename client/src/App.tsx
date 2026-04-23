@@ -1,4 +1,5 @@
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom"
+import RoleRedirect from "./pages/RoleRedirect"
 
 import AdminLayout from "./layouts/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -52,7 +53,7 @@ const App = () => {
       
 
         <Route element={<Protected />}>
-        <Route path="/" element={<Navigate to='/user/dashboard' />} />
+        <Route path="/" element={<RoleRedirect />} />
         <Route path="/user" element={<UserLayout />}>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path="shops" element={<Shops />} />

@@ -27,6 +27,7 @@ type registerResponse={
   userPayload: {
     user_id: string;
     email: string;
+    user_type:string;
   };
 }
 
@@ -118,9 +119,10 @@ const userSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: { payload: { user_id: string; email: string } }) => {
+    setUser: (state, action: { payload: { user_id: string; email: string; user_type: string } }) => {
       state.user_id = action.payload.user_id;
       state.email = action.payload.email;
+      state.user_type = action.payload.user_type;
       state.isAuthenticated = true;
       state.error = null;
     },
@@ -153,6 +155,8 @@ const userSlice = createSlice({
         state.loading=false;
         state.error=null;
         state.user_id=action.payload.userPayload.user_id;
+        state.email=action.payload.userPayload.email;
+        state.user_type=action.payload.userPayload.user_type;
         state.isAuthenticated=true;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -163,6 +167,7 @@ const userSlice = createSlice({
       .addCase(logoutUser.fulfilled,(state)=>{
         state.user_id = null;
         state.email = "";
+        state.user_type = "";
         state.isAuthenticated = false;
       })
   },
