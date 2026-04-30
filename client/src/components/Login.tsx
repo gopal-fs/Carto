@@ -19,7 +19,7 @@ const Login = () => {
         console.log(result)
         if(LoginUser.fulfilled.match(result)){
             toast.success("Login Successfull")
-            return navigate('/user/dashboard');
+            return navigate('/',{replace:true});
         }
         else{
             const error:string | undefined=result.payload;

@@ -104,7 +104,7 @@ const Register = ({user_type}:{user_type:string}) => {
         const result=await dispatch(registerUser({...user,user_type}));
         if(registerUser.fulfilled.match(result)){
             toast.success("Register Successfull");
-            return navigate('/user/dashboard');
+            return navigate('/',{replace:true});
         }
         else{
             const error:string | undefined=result.payload;

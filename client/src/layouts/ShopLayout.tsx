@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from "react-router-dom"
+import { Outlet, NavLink, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import {
   LayoutDashboard,
@@ -13,11 +13,26 @@ import {
   BadgeDollarSign,
   Orbit
 } from "lucide-react"
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../context/store";
+import { logoutUser } from "../context/user";
+import toast from "react-hot-toast";
 
 const ShopLayout = () => {
 
   const [open, setOpen] = useState(false);
   const [isClosed,setIsClosed]=useState<boolean>(false);
+  const dispatch=useDispatch<AppDispatch>();
+  const navigate=useNavigate();
+
+  const handleLogout=async()=>{
+    const res=await dispatch(logoutUser());
+    if(logoutUser.fulfilled.match(res)){
+      return navigate('/login');
+    }
+    return toast.error("Logout Failed")
+
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -187,7 +202,7 @@ const ShopLayout = () => {
   </div>
 
   {/* Logout */}
-  <button className="flex cursor-pointer items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500 hover:text-white">
+  <button onClick={handleLogout} className="flex cursor-pointer items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500 hover:text-white">
     <LogOut size={18}/>
     Logout
   </button>

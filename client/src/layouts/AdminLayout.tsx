@@ -7,11 +7,31 @@ import {
   X,
   ShieldCheck,
 } from "lucide-react"
+import toast from "react-hot-toast";
+
+
 
 const AdminLayout = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [login,setLogin]=useState<boolean>(
+    () => localStorage.getItem("token") !== null
+  );
+  const [email,setEmail]=useState<string>("");
+  const [password,setPassword]=useState<string>("");
+
+  const handleLogin=()=>{
+    if(email===import.meta.env.VITE_ADMIN_EMAIL && password===import.meta.env.VITE_ADMIN_PASSWORD){
+      localStorage.setItem("token",JSON.stringify(import.meta.env.VITE_ADMIN_TOKEN));
+      setLogin(true);
+      toast.success("Login Successfull")
+    }
+    else{
+      toast.error("Please Check Credentials")
+    }
+  }
 
   return (
+    login?
     <div className="flex h-screen bg-gray-100">
 
       {/* Mobile overlay */}
@@ -101,6 +121,14 @@ const AdminLayout = () => {
 
       </div>
     </div>
+    :<div className="min-h-screen bg-gray-800 w-full flex flex-col justify-center items-center">
+    <form className="border-1 text-white p-2 w-[full] flex flex-col gap-4 border-gray-200 rounded">
+          <input onChange={(e)=>setEmail(e.target.value)} type="email" name="email" className="rounded p-2 border-1 border-gray-50" value={email} placeholder="Enter Your Email" />
+          <input onChange={(e)=>setPassword(e.target.value)} type="password" name="password" className="rounded p-2 border-1 border-gray-50" value={password} placeholder="Enter Your Password" />
+          <button onClick={handleLogin} className="rounded bg-white h-[36px] w-[full] cursor-pointer text-black">Login</button>
+    </form>
+
+  </div>
   )
 }
 

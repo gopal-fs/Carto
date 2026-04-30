@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from "react-router-dom"
+import { Outlet, NavLink, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import {
   LayoutDashboard,
@@ -12,6 +12,10 @@ import {
   User,
   ChevronRight,
 } from "lucide-react"
+import type { AppDispatch } from "../context/store"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../context/user"
+import toast from "react-hot-toast"
 
 const navLinks = [
   { to: "/vendor", end: true, icon: LayoutDashboard, label: "Dashboard" },
@@ -24,6 +28,18 @@ const navLinks = [
 const VendorLayout = () => {
   const [open, setOpen] = useState(false)
   const [isAvailable, setIsAvailable] = useState(true)
+
+  const dispatch=useDispatch<AppDispatch>();
+  const navigate=useNavigate();
+
+  const handleLogout=async()=>{
+    const res=await dispatch(logoutUser());
+    if(logoutUser.fulfilled.match(res)){
+      return navigate('/login');
+    }
+    return toast.error("Logout Failed")
+
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -125,7 +141,7 @@ const VendorLayout = () => {
             </button>
           </div>
 
-          <button className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition cursor-pointer">
+          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition cursor-pointer">
             <LogOut size={17} />
             Logout
           </button>
