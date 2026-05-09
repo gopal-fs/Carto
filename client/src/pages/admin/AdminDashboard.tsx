@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Users,
   Store,
@@ -10,64 +10,20 @@ import {
   Mail,
   Clock,
 } from "lucide-react"
+import toast from "react-hot-toast"
+import axios from "axios"
 
 type PendingShop = {
-  id: number
-  name: string
-  email: string
-  location: string
-  category: string
-  registeredAt: string
-  pic: string
+  shop_id: string,
+  shop_type: string,
+  email: string,
+  shop_name: string,
+  location: string,
+  profile: string,
+  createdAt: string
 }
 
-const pendingShops: PendingShop[] = [
-  {
-    id: 1,
-    name: "The Spice Hub",
-    email: "spicehub@gmail.com",
-    location: "Hyderabad, Telangana",
-    category: "Grocery & Fresh Produce",
-    registeredAt: "19 Mar 2026, 9:14 AM",
-    pic: "/logosym.png",
-  },
-  {
-    id: 2,
-    name: "Fresh Basket",
-    email: "freshbasket@gmail.com",
-    location: "Bangalore, Karnataka",
-    category: "Organic & Health Foods",
-    registeredAt: "19 Mar 2026, 10:02 AM",
-    pic: "/logosym.png",
-  },
-  {
-    id: 3,
-    name: "Urban Mart",
-    email: "urbanmart.store@gmail.com",
-    location: "Mumbai, Maharashtra",
-    category: "Daily Essentials",
-    registeredAt: "18 Mar 2026, 3:45 PM",
-    pic: "/logosym.png",
-  },
-  {
-    id: 4,
-    name: "Green Corner",
-    email: "greencorner@gmail.com",
-    location: "Chennai, Tamil Nadu",
-    category: "Farm Fresh Store",
-    registeredAt: "18 Mar 2026, 11:30 AM",
-    pic: "/logosym.png",
-  },
-  {
-    id: 5,
-    name: "Daily Needs Co.",
-    email: "dailyneedsco@gmail.com",
-    location: "Pune, Maharashtra",
-    category: "Supermarket",
-    registeredAt: "17 Mar 2026, 2:20 PM",
-    pic: "/logosym.png",
-  },
-]
+
 
 const recentUsers = [
   { name: "Arjun Mehta",   email: "arjun.mehta@gmail.com",   joined: "19 Mar 2026",  orders: 5  },
@@ -91,21 +47,55 @@ const iconColor: Record<string, string> = {
   violet:  "bg-violet-100 text-violet-600",
 }
 
-const AdminDashboard = () => {
-  const [shops, setShops] = useState<PendingShop[]>(pendingShops)
-  const [actionMap, setActionMap] = useState<Record<number, "approved" | "rejected">>({})
 
-  const handleAction = (id: number, action: "approved" | "rejected") => {
-    setActionMap(prev => ({ ...prev, [id]: action }))
-    setTimeout(() => {
-      setShops(prev => prev.filter(s => s.id !== id))
-      setActionMap(prev => {
-        const next = { ...prev }
-        delete next[id]
-        return next
-      })
-    }, 800)
-  }
+const backend_url = import.meta.env.VITE_BACKEND_URL;
+const AdminDashboard = () => {
+  
+
+  const [pendingShops,setPendingShops]=useState<PendingShop []>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(backend_url + "/shop/getPendingShops", {
+          withCredentials: true,
+        });
+        if (res.data.success) {
+
+          setPendingShops(res.data.shopsList ?? []);
+        }
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          return toast.error(err.response?.data?.message || "Failed to Load Shops");
+        }
+        return toast.error("Failed to Load Shops");
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleAction = async (shop_id: string, action: "approved" | "rejected") => {
+    try {
+      const ans = action === "approved";
+
+      const res = await axios.patch(
+        backend_url + "/admin/updateShopStatus",
+        { shop_id, ans },
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        setPendingShops(prev => prev.filter(s => s.shop_id !== shop_id));
+        return toast.success(res.data.message || "Status Updated");
+      }
+      toast.error(res.data.message || "Failed To Update");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return toast.error(err.response?.data?.message || "Failed To Update");
+      }
+      toast.error("Failed To Update");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6 pb-6">
@@ -134,20 +124,20 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* ── Two sections ── */}
+     
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
-        {/* Section 1 — Shop Approvals */}
+        
         <div className="xl:col-span-2 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
             <div>
               <h2 className="font-bold text-gray-800 text-sm">Shop Approvals</h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                {shops.length} shop{shops.length !== 1 ? "s" : ""} pending review
+                {pendingShops.length} shop{pendingShops.length !== 1 ? "s" : ""} pending review
               </p>
             </div>
-            {shops.length > 0 && (
+            {pendingShops.length > 0 && (
               <span className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
                 <Clock size={11} />
                 Pending
@@ -155,7 +145,7 @@ const AdminDashboard = () => {
             )}
           </div>
 
-          {shops.length === 0 ? (
+          {pendingShops.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-gray-400 gap-2">
               <CheckCircle2 size={36} className="text-emerald-400 opacity-60" />
               <p className="text-sm font-semibold text-gray-500">All caught up!</p>
@@ -163,22 +153,21 @@ const AdminDashboard = () => {
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
-              {shops.map(shop => {
-                const done = actionMap[shop.id]
+              {pendingShops.map(shop => {
+                
                 return (
                   <div
-                    key={shop.id}
-                    className={`flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 transition
-                      ${done === "approved" ? "bg-emerald-50" : done === "rejected" ? "bg-red-50" : "hover:bg-gray-50"}`}
+                    key={shop.shop_id}
+                    className={`flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 transition`}
                   >
-                    {/* Shop info */}
+                    
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="h-11 w-11 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 border border-gray-200 overflow-hidden">
-                        <img src={shop.pic} className="h-7 w-7 object-contain" />
+                        <img src={shop.profile} className="h-7 w-7 object-contain" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-gray-800 truncate">{shop.name}</p>
-                        <p className="text-xs text-indigo-500 font-medium truncate">{shop.category}</p>
+                        <p className="text-sm font-bold text-gray-800 truncate">{shop.shop_name}</p>
+                        <p className="text-xs text-indigo-500 font-medium truncate">{shop.shop_type}</p>
                         <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
                           <span className="flex items-center gap-1 text-[11px] text-gray-400">
                             <Mail size={10} />
@@ -191,39 +180,27 @@ const AdminDashboard = () => {
                         </div>
                         <p className="text-[10px] text-gray-300 mt-0.5 flex items-center gap-1">
                           <Clock size={9} />
-                          {shop.registeredAt}
+                          {new Date(shop.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
 
                     {/* Action buttons */}
                     <div className="flex gap-2 flex-shrink-0">
-                      {done === "approved" ? (
-                        <span className="flex items-center gap-1.5 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold">
-                          <CheckCircle2 size={13} /> Approved
-                        </span>
-                      ) : done === "rejected" ? (
-                        <span className="flex items-center gap-1.5 px-4 py-2 bg-red-100 text-red-600 rounded-xl text-xs font-bold">
-                          <XCircle size={13} /> Rejected
-                        </span>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => handleAction(shop.id, "approved")}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition"
+                    <button
+                            onClick={() => handleAction(shop.shop_id, "approved")}
+                            className="cursor-pointer flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition"
                           >
                             <CheckCircle2 size={13} />
                             Approve
                           </button>
                           <button
-                            onClick={() => handleAction(shop.id, "rejected")}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-red-50 border border-red-200 text-red-500 rounded-xl text-xs font-bold transition"
+                            onClick={() => handleAction(shop.shop_id, "rejected")}
+                            className="cursor-pointer flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-red-50 border border-red-200 text-red-500 rounded-xl text-xs font-bold transition"
                           >
                             <XCircle size={13} />
                             Reject
                           </button>
-                        </>
-                      )}
                     </div>
                   </div>
                 )

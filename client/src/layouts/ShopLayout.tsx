@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   LayoutDashboard,
   Package,
@@ -13,25 +13,41 @@ import {
   BadgeDollarSign,
   Orbit
 } from "lucide-react"
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../context/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../context/store";
 import { logoutUser } from "../context/user";
+import { fetchShop } from "../context/shop";
 import toast from "react-hot-toast";
 
 const ShopLayout = () => {
 
   const [open, setOpen] = useState(false);
-  const [isClosed,setIsClosed]=useState<boolean>(false);
-  const dispatch=useDispatch<AppDispatch>();
-  const navigate=useNavigate();
+  const [isClosed, setIsClosed] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const handleLogout=async()=>{
-    const res=await dispatch(logoutUser());
-    if(logoutUser.fulfilled.match(res)){
+  const { shop_id, hydrated, loading } = useSelector(
+    (state: RootState) => state.shop
+  );
+
+  useEffect(() => {
+    if (!hydrated && !loading) dispatch(fetchShop());
+  }, [hydrated, loading, dispatch]);
+
+  const handleLogout = async () => {
+    const res = await dispatch(logoutUser());
+    if (logoutUser.fulfilled.match(res)) {
       return navigate('/login');
     }
     return toast.error("Logout Failed")
+  }
 
+  if (!hydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -66,7 +82,7 @@ const ShopLayout = () => {
         <nav className="flex flex-col gap-2 px-4">
 
           <NavLink
-            to="/shop/id"
+            to={`/shop/${shop_id}`}
             end
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
@@ -81,7 +97,7 @@ const ShopLayout = () => {
 
 
           <NavLink
-            to="/shop/id/vendor"
+            to={`/shop/${shop_id}/vendor`}
             end
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
@@ -100,7 +116,7 @@ const ShopLayout = () => {
 
 
           <NavLink
-            to="/shop/id/products"
+            to={`/shop/${shop_id}/products`}
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -113,7 +129,7 @@ const ShopLayout = () => {
           </NavLink>
 
           <NavLink
-            to="/shop/id/add-products"
+            to={`/shop/${shop_id}/add-products`}
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -128,7 +144,7 @@ const ShopLayout = () => {
           
 
           <NavLink
-            to="/shop/id/shop-page"
+            to={`/shop/${shop_id}/shop-page`}
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -141,7 +157,7 @@ const ShopLayout = () => {
           </NavLink>
 
           <NavLink
-            to="/shop/id/coupons"
+            to={`/shop/${shop_id}/coupons`}
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition
               ${isActive
@@ -154,7 +170,7 @@ const ShopLayout = () => {
           </NavLink>
 
           <NavLink
-            to="/shop/id/sale"
+            to={`/shop/${shop_id}/sale`}
             end
             className={({isActive}) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg transition

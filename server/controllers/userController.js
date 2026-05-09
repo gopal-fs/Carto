@@ -127,3 +127,15 @@ export const getUser = async (req, res) => {
       return res.status(500).send({success:false,message:"Unable to logout"});
     }
   }
+
+
+  export const getTotalUsers=async(req,res)=>{
+    try{
+      const result=await userModel.find({user_type:"user"});
+      return res.status(200).send({success:true,message:result.length});
+    }
+    catch(err){
+      console.log(err.message);
+      return res.status(500).send({success:false,message:"Unable to fetch users"});
+    }
+  }

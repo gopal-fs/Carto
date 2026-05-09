@@ -1,6 +1,45 @@
 import { ShoppingCart, Users, Star, DollarSign } from "lucide-react"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../context/store"
+import { Navigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import axios from "axios"
 
+
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 const ShopDashboard = () => {
+
+  const { rating, orders, revenue, isRegistered, isApproved } = useSelector(
+    (state: RootState) => state.shop
+  );
+
+  const [customer, setCustomer] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isRegistered || !isApproved) return;
+
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(backend_url + "/getusers", {
+          withCredentials: true,
+        });
+        if (res?.data?.success) {
+          setCustomer(res.data.message);
+        }
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          return toast.error(err.response?.data?.message || "Failed to Fetch Customers");
+        }
+      }
+    };
+
+    fetchData();
+  }, [isRegistered, isApproved]);
+
+  if (!isRegistered || !isApproved) {
+    return <Navigate to="/shop/register" replace />;
+  }
   return (
 
     <div>
@@ -15,7 +54,7 @@ const ShopDashboard = () => {
 
           <div className="flex flex-col min-w-0">
           <span className="text-lg sm:text-2xl font-semibold text-gray-800 truncate">
-              0
+              {orders.length}
             </span>
             <span className="text-xs sm:text-sm text-gray-500 font-medium truncate">
               Today's Orders
@@ -35,7 +74,7 @@ const ShopDashboard = () => {
 
           <div className="flex flex-col min-w-0">
           <span className="text-lg sm:text-2xl font-semibold text-gray-800 truncate">
-              45K
+              {revenue}
             </span>
             <span className="text-xs sm:text-sm text-gray-500 font-medium truncate">
               Mothly Revenue
@@ -55,7 +94,7 @@ const ShopDashboard = () => {
 
           <div className="flex flex-col min-w-0">
           <span className="text-lg sm:text-2xl font-semibold text-gray-800 truncate">
-              125
+              {customer}
             </span>
             <span className="text-xs sm:text-sm text-gray-500 font-medium truncate">
               Total Customers
@@ -75,7 +114,7 @@ const ShopDashboard = () => {
 
           <div className="flex flex-col min-w-0">
           <span className="text-lg sm:text-2xl font-semibold text-gray-800 truncate">
-              4.6
+              {rating}
             </span>
             <span className="text-xs sm:text-sm text-gray-500 font-medium truncate">
               Rating

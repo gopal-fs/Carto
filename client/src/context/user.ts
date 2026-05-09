@@ -72,7 +72,6 @@ export const LoginUser = createAsyncThunk<
   }
 );
 
-
 export const registerUser=createAsyncThunk<registerResponse,{email:string,password:string,number:string,location:string,latitude:number | null,longitude:number | null,user_type:string},{rejectValue:string}>(
   "user/register",
   async(data,{rejectWithValue})=>{
@@ -113,7 +112,6 @@ export const logoutUser=createAsyncThunk<logoutResponse,void,{rejectValue:string
   }
 
 )
-
 
 const userSlice = createSlice({
   name: "auth",

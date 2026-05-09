@@ -73,7 +73,6 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
 
         </Route>
-        </Route>
         {/* <Route path="/shop" element={<Navigate to="register" />} /> */}
         <Route path="/shop/register" element={<RegisterShop />} />
         <Route path="/shop/:id" element={<ShopLayout />}>
@@ -84,9 +83,6 @@ const App = () => {
           <Route  path="sale" element={<Sale />} />
           <Route  path="add-products" element={<AddProduct />} />
           <Route  path="vendor" element={<ShopVendor />} />
-        </Route>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
         </Route>
         <Route path="/vendor" element={<VendorLayout />}>
           <Route index element={<VendorDashboard />} />
@@ -100,6 +96,13 @@ const App = () => {
           <Route path="orders" element={<DeliveryOrders />} />
           <Route path="profile" element={<DeliveryProfile />} />
         </Route>
+        </Route>
+        
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+        </Route>
+        
+        
         <Route path="*" element={<NotFound />}/>
         <Route path="/login" element={<Auth />} />
       </>

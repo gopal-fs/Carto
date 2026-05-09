@@ -7,6 +7,8 @@ import {createServer} from "http";
 import userRouter from "./routes/userRouter.js";
 import { checkAuth } from "./middlewares/checkAuth.js";
 import cookieParser from "cookie-parser";
+import shopRouter from "./routes/shopRouter.js";
+import adminRouter from "./routes/adminRouter.js";
 dotenv.config();
 
 const app=express();
@@ -38,6 +40,8 @@ app.get('/',checkAuth,(req,res)=>{
 
 /* Route Definitions */
 app.use('/api',userRouter);
+app.use('/api/shop',shopRouter);
+app.use('/api/admin',adminRouter);
 
 
 
