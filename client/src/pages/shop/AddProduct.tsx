@@ -9,6 +9,8 @@ import {
   Scale,
   Coins,
 } from 'lucide-react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 type MeasurementType = 'piece' | 'kg' | 'litre' | ''
 
@@ -28,6 +30,8 @@ interface LitrePrices {
 
 const priceInputCls =
   'w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm text-gray-700 placeholder:text-gray-300 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 transition'
+
+
 
 const PriceField = ({
   label,
@@ -50,7 +54,6 @@ const PriceField = ({
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder ?? '0.00'}
         min="0"
-        step="0.01"
         required
         className={priceInputCls}
       />
@@ -58,8 +61,12 @@ const PriceField = ({
   </div>
 )
 
+
+const backend_url=import.meta.env.VITE_BACKEND_URL+'/shop';
+
 const AddProduct = () => {
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(null);
+  const [productImage,setProductImage]=useState<File | null>(null);
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [keyFeatures, setKeyFeatures] = useState('')
@@ -67,11 +74,12 @@ const AddProduct = () => {
   const [piecePrice, setPiecePrice] = useState('')
   const [kgPrices, setKgPrices] = useState<KgPrices>({ g100: '', g250: '', g500: '', kg1: '' })
   const [litrePrices, setLitrePrices] = useState<LitrePrices>({ ml100: '', ml250: '', ml500: '', l1: '' })
-  const fileRef = useRef<HTMLInputElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
+    if (!file) return;
+    setProductImage(file);
     if (preview) URL.revokeObjectURL(preview)
     setPreview(URL.createObjectURL(file))
   }
@@ -90,9 +98,10 @@ const AddProduct = () => {
     return false
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!isPricesFilled()) return
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    try{
+      e.preventDefault()
+    if (!isPricesFilled() || !productImage) return;
 
     const pricing =
       measurement === 'piece'
@@ -101,7 +110,33 @@ const AddProduct = () => {
         ? kgPrices
         : litrePrices
 
-    console.log({ name, description, keyFeatures, measurement, pricing })
+        const addProduct=await axios.post(backend_url+"/add-product",{name,description,productImage,measurement,pricing,keyFeatures},{
+          withCredentials:true,
+          headers:{
+            "Content-Type":"multipart/form-data"
+          }
+          
+        });
+        if(addProduct.data?.success){
+          setName("");
+          setPreview(null);
+          setDescription("");
+          setKeyFeatures("");
+          setProductImage(null);
+          setMeasurement('');
+          setPiecePrice('');
+          setKgPrices({ g100: '', g250: '', g500: '', kg1: '' });
+          setLitrePrices({ ml100: '', ml250: '', ml500: '', l1: '' });
+          return toast.success(addProduct.data?.message);
+        }
+    }
+    catch(err){
+      if(axios.isAxiosError(err)){
+        console.log(err.message);
+        return toast.error(err.response?.data?.message ?? "Failed to Add Product");
+      }
+    }
+  
   }
 
   const inputCls =

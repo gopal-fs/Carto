@@ -1,7 +1,7 @@
 import shopModel from "../schemas/shopSchema.js";
 import { uploadToCloudinary } from "../configs/cloudinary.js";
 import userModel from "../schemas/userSchema.js";
-
+import {v4 as uuid} from "uuid";
 export const shopRegister = async (req, res) => {
     try {
         const shop_id = req.payload?.user_id;
@@ -119,5 +119,194 @@ export const getPendingShops=async(req,res)=>{
     catch(err){
         console.log(err.message);
         return res.status(500).send({success:false,message:"Failed to Fetch Shops"});
+    }
+}
+
+export const addProduct=async(req,res)=>{
+    try{
+        
+        const shop_id=req.payload.user_id;
+        
+        if(!shop_id) return res.status(400).send({success:false,message:"Please Login"});
+      
+        const productImage=req.file;
+       
+        console.log(productImage)
+        const {name,description,pricing,keyFeatures,measurement}=req.body;
+
+        console.log(name,description,pricing,keyFeatures,measurement)
+        
+        if(!productImage || !name || !description || !measurement || !pricing || !keyFeatures) return res.status(400).send({success:false,message:"All Fields Required"});
+        
+        const productImageUrl=await uploadToCloudinary(productImage.buffer,"carto/shop/products");
+        const productData={
+            product_id:uuid(),
+            image:productImageUrl,
+            name:name,
+            sold_by:{
+                category:measurement,
+                prices:pricing
+            },
+            description:description,
+            features:keyFeatures
+        }
+        const add=await shopModel.findOneAndUpdate({shop_id:shop_id},{
+            $push:{
+                products:productData
+            }
+        });
+
+        return res.status(200).send({success:true,message:"Product Uploaded"});
+    }
+    catch(err){
+        return res.status(500).send({success:false,message:"Failed to Add Product"});
+    }
+}
+
+
+export const getProducts = async (req, res) => {
+    try {
+        const shop_id = req.payload?.user_id;
+        if (!shop_id) {
+            return res.status(401).send({ success: false, message: "Please login" });
+        }
+
+        const shop = await shopModel.findOne({ shop_id }, { products: 1 }).lean();
+        if (!shop) {
+            return res.status(404).send({ success: false, message: "Shop not found" });
+        }
+
+        return res.status(200).send({ success: true, products: shop.products ?? [] });
+    } catch (err) {
+        console.log(err.message);
+        return res.status(500).send({ success: false, message: "Failed to Fetch Products" });
+    }
+}
+
+export const updateDiscount=async(req,res)=>{
+    try{
+        const {product_id}=req.params;
+        const {discount}=req.body;
+        const shop_id=req.payload?.user_id;
+
+        const updateProduct=await shopModel.findOneAndUpdate(
+            {
+               shop_id,
+               "products.product_id": product_id
+            },
+            {
+               $set:{
+                  "products.$.discount": Number(discount)
+               }
+            },
+            { new: true }
+         );
+
+        if(!updateProduct) return res.status(404).send({success:false,message:"Product not found"});
+
+        return res.status(200).send({success:true,message:"Discount Updated"});
+    }
+    catch(err){
+        console.log(err.message);
+        return res.status(500).send({success:false,message:"Failed to Update Status"});
+    }
+}
+
+
+export const updateProduct = async (req, res) => {
+    try {
+        const { product_id } = req.params;
+        const shop_id = req.payload?.user_id;
+        if (!shop_id) return res.status(401).send({ success: false, message: "Please login" });
+
+        const { name, description, features, pricing } = req.body;
+        const productImage = req.file;
+
+        const shop = await shopModel.findOne({ shop_id });
+        if (!shop) return res.status(404).send({ success: false, message: "Shop not found" });
+
+        const product = shop.products.find(p => p.product_id === product_id);
+        if (!product) return res.status(404).send({ success: false, message: "Product not found" });
+
+        if (name) product.name = name;
+        if (description) product.description = description;
+        if (features) product.features = features;
+
+        if (productImage) {
+            const url = await uploadToCloudinary(productImage.buffer, "carto/shop/products");
+            product.image = url;
+        }
+
+        if (pricing) {
+            const parsed = typeof pricing === "string" ? JSON.parse(pricing) : pricing;
+            product.sold_by.prices.clear();
+            for (const [k, v] of Object.entries(parsed)) {
+                product.sold_by.prices.set(k, Number(v));
+            }
+        }
+
+        await shop.save();
+
+        const updated = shop.toObject({ flattenMaps: true }).products.find(
+            p => p.product_id === product_id
+        );
+
+        return res.status(200).send({ success: true, message: "Product Updated", product: updated });
+    } catch (err) {
+        console.log(err.message);
+        return res.status(500).send({ success: false, message: "Failed to Update Product" });
+    }
+};
+
+export const updateAvailability=async(req,res)=>{
+    try{
+        const {product_id}=req.params;
+        const {isAvailable}=req.body;
+        const shop_id=req.payload?.user_id;
+
+        const updateProduct=await shopModel.findOneAndUpdate(
+            {
+               shop_id,
+               "products.product_id": product_id
+            },
+            {
+               $set:{
+                  "products.$.isAvailable": isAvailable
+               }
+            },
+            { new: true }
+         );
+
+        if(!updateProduct) return res.status(404).send({success:false,message:"Product not found"});
+
+        return res.status(200).send({success:true,message:"Status Updated"});
+    }
+    catch(err){
+        console.log(err.message);
+        return res.status(500).send({success:false,message:"Failed to Update Status"});
+;    }
+}
+
+
+
+export const deleteProduct=async(req,res)=>{
+    try{
+        const {product_id}=req.body;
+        const shop_id=req.payload?.user_id;
+
+        const deleteProduct=await shopModel.findOneAndUpdate({shop_id,"products.product_id":product_id},{
+            $pull:{
+                products:{
+                    product_id:product_id
+                }
+            }
+        },{new:true});
+
+        if(!deleteProduct) return res.status(404).send({success:false,message:"Product Not Found"});
+
+        return res.status(200).send({success:true,message:"Product Deleted Successfully"});
+    }
+    catch(err){
+        return res.status(500).send({success:false,message:"Failed to Delete Product"});
     }
 }

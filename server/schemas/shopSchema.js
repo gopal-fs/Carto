@@ -33,7 +33,18 @@ const shopSchema = new mongoose.Schema({
         product_id: { type: String, required: true },
         image: { type: String, required: true },
         name: { type: String, required: true },
-        sold_by: { type: String, required: true, enum: ["pc", "kg", "ml"] },
+        sold_by:{
+            category:{
+                type:String,
+                enum:["piece","kg","litre"]
+            },
+    
+            prices:{
+                type:Map,
+                of:Number
+            }
+        },
+        discount:{type:Number,default:0},
         description: { type: String, required: true },
         features: { type: String, required: true },
         isAvailable: { type: Boolean, default: true },
